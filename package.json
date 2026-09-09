@@ -1,0 +1,18 @@
+{
+  "name": "battlesnake",
+  "version": "1.0.0",
+  "description": "Template de Battlesnake em JavaScript rodando em AWS Lambda - Dev. Community Maua",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/local.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "serverless-http": "^3.2.0"
+  }
+}

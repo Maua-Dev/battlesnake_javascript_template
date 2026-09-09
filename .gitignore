@@ -1,0 +1,20 @@
+# Node
+node_modules/
+npm-debug.log*
+build/
+
+# Terraform
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+override.tf
+override.tf.json
+.terraformrc
+terraform.rc
+
+# Sistema
+.DS_Store
+.idea/
+.vscode/
