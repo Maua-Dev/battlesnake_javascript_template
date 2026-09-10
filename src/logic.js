@@ -84,8 +84,12 @@ export function move(gameState) {
   const safeMoves = Object.keys(isMoveSafe).filter((direction) => isMoveSafe[direction]);
 
   if (safeMoves.length === 0) {
-    console.log(`MOVE ${gameState.turn}: sem saída! descendo`);
-    return { move: "down" };
+    // Emergência: todas as direções são perigosas.
+    // Escolhemos uma ao acaso entre as 4 — melhor do que uma direção fixa.
+    const allMoves = ["up", "down", "left", "right"];
+    const fallback = allMoves[Math.floor(Math.random() * allMoves.length)];
+    console.log(`MOVE ${gameState.turn}: sem saída! emergência -> ${fallback}`);
+    return { move: fallback };
   }
 
   // Escolhe uma direção segura ao acaso.
