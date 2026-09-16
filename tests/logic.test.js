@@ -184,8 +184,8 @@ test("o middleware não engole a lógica anti-ré", async () => {
 test("evita parede quando tem outra opção", async () => {
   // Cobra no canto inferior esquerdo, pescoço à direita:
   // não pode ir para left (x=-1) nem down (y=-1) nem right (pescoço).
-  // A única saída segura seria "up" — mas como os TODO de parede ainda
-  // não estão implementados, apenas verificamos que retorna uma direção válida.
+  // A parede já está implementada, então left e down estão descartados e o
+  // pescoço descarta right: a única saída possível é "up".
   const state = gameState({ x: 0, y: 0 }, { x: 1, y: 0 });
 
   for (let i = 0; i < 50; i++) {
