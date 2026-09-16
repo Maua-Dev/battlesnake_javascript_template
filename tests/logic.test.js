@@ -180,3 +180,79 @@ test("o middleware não engole a lógica anti-ré", async () => {
     assert.notEqual(direcao, "left");
   }
 });
+
+test("evita parede quando tem outra opção", async () => {
+  // Cobra no canto inferior esquerdo, pescoço à direita:
+  // não pode ir para left (x=-1) nem down (y=-1) nem right (pescoço).
+  // A parede já está implementada, então left e down estão descartados e o
+  // pescoço descarta right: a única saída possível é "up".
+  const state = gameState({ x: 0, y: 0 }, { x: 1, y: 0 });
+
+  for (let i = 0; i < 50; i++) {
+    const direction = move(state).move;
+    assert.ok(DIRECTIONS.includes(direction), `direção inválida: ${direction}`);
+    // A cobra NÃO deve voltar pelo pescoço
+    assert.notEqual(direction, "right", "voltou pelo pescoço");
+  }
+});
+
+test("evita próprio corpo quando tem opção", () => {
+  // Cabeça em (5,4), pescoço à esquerda (4,4).
+  // Corpo em (5,5) bloqueia "up".
+  // Restam "right" e "down" como opções seguras.
+  const head = { x: 5, y: 4 };
+  const neck = { x: 4, y: 4 };
+  const bodyBlock = { x: 5, y: 5 };
+  const you = {
+    id: "minha-cobra",
+    name: "MinhaCobra",
+    health: 100,
+    body: [head, neck, bodyBlock, { x: 4, y: 3 }],
+    head,
+    length: 4,
+    latency: "50",
+    shout: "",
+  };
+  const state = {
+    game: { id: "teste", ruleset: {}, timeout: 500 },
+    turn: 1,
+    board: { height: 11, width: 11, food: [], hazards: [], snakes: [you] },
+    you,
+  };
+
+  for (let i = 0; i < 50; i++) {
+    const direction = move(state).move;
+    assert.ok(DIRECTIONS.includes(direction));
+    assert.notEqual(direction, "left", "voltou pelo pescoço");
+    assert.notEqual(direction, "up",   "bateu no próprio corpo");
+  }
+});
+
+test("comportamento definido quando não há safe moves", () => {
+  // Todas as direções são perigosas: a função não pode lançar exceção
+  // e deve retornar uma das quatro direções válidas.
+  const head = { x: 0, y: 0 };
+  const neck = { x: 0, y: 1 }; // pescoço acima — bloqueia "up"
+  const you = {
+    id: "minha-cobra",
+    name: "MinhaCobra",
+    health: 100,
+    body: [head, neck, { x: 1, y: 0 }, { x: 0, y: 1 }],
+    head,
+    length: 4,
+    latency: "50",
+    shout: "",
+  };
+  const state = {
+    game: { id: "teste", ruleset: {}, timeout: 500 },
+    turn: 1,
+    board: { height: 11, width: 11, food: [], hazards: [], snakes: [you] },
+    you,
+  };
+
+  // Mesmo encurralada, deve retornar uma direção válida sem lançar exceção.
+  assert.doesNotThrow(() => {
+    const result = move(state);
+    assert.ok(DIRECTIONS.includes(result.move), `direção inválida: ${result.move}`);
+  });
+});

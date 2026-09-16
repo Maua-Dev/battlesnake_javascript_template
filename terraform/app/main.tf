@@ -76,7 +76,9 @@ resource "aws_lambda_function" "battlesnake" {
   role = aws_iam_role.lambda_role.arn
 
   # "src/index.handler" = a constante `handler` exportada por src/index.js.
-  runtime       = "nodejs20.x"
+  # nodejs20.x foi descontinuado em 30/abr/2026 e a AWS recusa funcoes novas
+  # nele. O 22.x e o mais novo aceito pelo provider aws ~> 5.0.
+  runtime       = "nodejs22.x"
   handler       = "src/index.handler"
   architectures = ["arm64"]
 
