@@ -48,7 +48,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: 'us-east-1'
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID_DEV }}:role/GithubActionsRole
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           role-session-name: github-action-terraform-deploy
 
       - name: Setup Terraform
@@ -135,7 +135,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: 'us-east-1'
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID_DEV }}:role/GithubActionsRole
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           role-session-name: github-action-terraform-deploy
 
       - name: Setup Terraform
